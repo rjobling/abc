@@ -16,6 +16,17 @@ struct pngPixel
 	uint8_t a;
 };
 
+enum QuantBias_t
+{
+	kFlat,
+	kRGB,
+	kRBG,
+	kGRB,
+	kGBR,
+	kBRG,
+	kBGR,
+};
+
 typedef unsigned int	ColorError_t;
 static const ColorError_t kColorErrorMax = ~0;
 
@@ -122,13 +133,26 @@ struct ColorErrorI
 		return a;
 	}
 
-	static Color444 	QuantizeN(const ColorErrorI& a, int bitPerComponent)
+	static Color444 	QuantizeN(const ColorErrorI& a, QuantBias_t bias, int bitPerComponent)
 	{
-		int r = (a.r < 0) ? 0 : (a.r > 255) ? 255 : a.r;
-		int g = (a.g < 0) ? 0 : (a.g > 255) ? 255 : a.g;
-		int b = (a.b < 0) ? 0 : (a.b > 255) ? 255 : a.b;
+		int r = a.r;
+		int g = a.g;
+		int b = a.b;
 		const unsigned int shift = 8-bitPerComponent;
 		const unsigned int lshift = shift-4;
+		switch (bias)
+		{
+			case kFlat:												 break;
+			case kRGB: r += (2 << shift) / 3; g += (1 << shift) / 3; break;
+			case kRBG: r += (2 << shift) / 3; b += (1 << shift) / 3; break;
+			case kGRB: g += (2 << shift) / 3; r += (1 << shift) / 3; break;
+			case kGBR: g += (2 << shift) / 3; b += (1 << shift) / 3; break;
+			case kBRG: b += (2 << shift) / 3; r += (1 << shift) / 3; break;
+			case kBGR: b += (2 << shift) / 3; g += (1 << shift) / 3; break;
+		}
+		r = (r < 0) ? 0 : (r > 255) ? 255 : r;
+		g = (g < 0) ? 0 : (g > 255) ? 255 : g;
+		b = (b < 0) ? 0 : (b > 255) ? 255 : b;
 		r >>= shift;
 		g >>= shift;
 		b >>= shift;

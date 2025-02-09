@@ -59,6 +59,8 @@ struct ConvertParams
 	bool		hamDebug;
 	Dithering_t	dithering;
 
+	QuantBias_t quantBias;
+
 	int			remapCount;
 	struct RemapInfo
 	{

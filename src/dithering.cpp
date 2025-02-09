@@ -166,7 +166,7 @@ pngPixel	BayerDither(const pngPixel& ic, int x, int y, int bpp)
 	return rc;
 }
 
-Color444* ColorDepthQuantize444WithDitheringInt(const pngFile& src, Dithering_t dither, int bitPerComponent)
+Color444* ColorDepthQuantize444WithDitheringInt(const pngFile& src, Dithering_t dither, QuantBias_t bias, int bitPerComponent)
 {
 	const int imgW = src.GetWidth();
 	const int imgH = src.GetHeight();
@@ -187,7 +187,7 @@ Color444* ColorDepthQuantize444WithDitheringInt(const pngFile& src, Dithering_t 
 			if (kNone == dither)
 			{
 				ColorErrorI originalPixel = ColorErrorI::FromPngPixel(color);
-				quantPixel = ColorErrorI::QuantizeN(originalPixel, bitPerComponent);
+				quantPixel = ColorErrorI::QuantizeN(originalPixel, bias, bitPerComponent);
 			}
 			else if (kBayer == dither)
 			{
@@ -201,7 +201,7 @@ Color444* ColorDepthQuantize444WithDitheringInt(const pngFile& src, Dithering_t 
 				ColorErrorI correctedPixel = ColorErrorI::FromPngPixel(color);
 				correctedPixel.Add(ReadErrorInt(errorBuffer[y*imgW + x], prec));
 
-				quantPixel = ColorErrorI::QuantizeN(correctedPixel, bitPerComponent);
+				quantPixel = ColorErrorI::QuantizeN(correctedPixel, bias, bitPerComponent);
 				ColorErrorI quantPixelI = ColorErrorI::FromColor444(quantPixel);
 
 //				ColorErrorI errorPixel = correctedPixel;

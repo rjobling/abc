@@ -40,6 +40,8 @@ ConvertParams::ConvertParams()
 		forceColors[i] = -1;
 
 	dithering = Dithering_t::kNone;
+
+	quantBias = QuantBias_t::kFlat;
 }
 
 static bool	IsIndexNeedShrinking(pngFile& bitmap, int colorCount)
@@ -630,6 +632,42 @@ bool	ParseArgs(int argc, char* argv[], ConvertParams& params)
 			else if (0 == strcmp("-atari", argv[argId]))
 			{
 				params.atari = true;
+			}
+			else if ((0 == strcmp("-bias", argv[argId]) && (argId + 1 < argc)))
+			{
+				argId++;
+				if (0 == strcmp("flat", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kFlat;
+				}
+				else if (0 == strcmp("rgb", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kRGB;
+				}
+				else if (0 == strcmp("rbg", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kRBG;
+				}
+				else if (0 == strcmp("brg", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kBRG;
+				}
+				else if (0 == strcmp("bgr", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kBGR;
+				}
+				else if (0 == strcmp("grb", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kGRB;
+				}
+				else if (0 == strcmp("gbr", argv[argId]))
+				{
+					params.quantBias = QuantBias_t::kGBR;
+				}
+				else
+				{
+					printf("ERROR: Unknown bias option \"%s\"\n", argv[argId]);
+				}
 			}
 			else
 			{
@@ -1353,7 +1391,7 @@ int main(int argc, char*argv[])
 				{
 					const int bitPerComponent = (params.atari && (!params.ste)) ? 3 : 4;
 					printf("RGB888 quantization to RGB%d%d%d (%s dithering)...\n", bitPerComponent, bitPerComponent,bitPerComponent,sDitherName[int(params.dithering)]);
-					src444 = ColorDepthQuantize444WithDitheringInt(bitmap, params.dithering, bitPerComponent);
+					src444 = ColorDepthQuantize444WithDitheringInt(bitmap, params.dithering, params.quantBias, bitPerComponent);
 				}
 			}
 

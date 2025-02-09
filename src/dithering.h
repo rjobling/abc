@@ -20,5 +20,5 @@ enum Dithering_t
 };
 
 Color555* ColorDepthQuantize555WithDitheringInt(const pngFile& src, Dithering_t dither);
-Color444* ColorDepthQuantize444WithDitheringInt(const pngFile& src, Dithering_t dither, int bitPerComponent);
+Color444* ColorDepthQuantize444WithDitheringInt(const pngFile& src, Dithering_t dither, QuantBias_t bias, int bitPerComponent);
 Color444* Split555(const Color555* src, int w, int h);
