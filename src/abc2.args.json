@@ -1,0 +1,22 @@
+{
+  "FileVersion": 2,
+  "Id": "e7d8e13a-8c4f-46ec-84ed-00345ac5c2f6",
+  "Items": [
+    {
+      "Id": "d254913e-7cb0-4963-b9c1-3968631ad601",
+      "Command": "image1.png -preview image1_preview2.png"
+    },
+    {
+      "Id": "7b79e836-8640-4cc7-a288-b05a47784491",
+      "Command": "-rgb"
+    },
+    {
+      "Id": "9925d769-fb54-4e09-8e94-8242b3a12917",
+      "Command": "-floyd"
+    },
+    {
+      "Id": "ea059ca0-5506-4f72-b6a0-4ad943728d5d",
+      "Command": "-bias rgb"
+    }
+  ]
+}
